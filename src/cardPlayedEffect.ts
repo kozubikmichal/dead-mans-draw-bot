@@ -1,7 +1,7 @@
 import Oracle from "./cardPlayedEffects/Oracle";
 import Sword from "./cardPlayedEffects/Sword";
 import Cannon from "./cardPlayedEffects/Cannon";
-import { CardPlayedEffectResponse, GameLoop, Suit } from "./types";
+import GameLoop, { CardPlayedEffectResponse, Suit } from "./types";
 
 const noop = () => {};
 

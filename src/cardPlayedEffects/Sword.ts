@@ -11,7 +11,7 @@ to Bust.
  * strategy: check Oracle, check Mermaid, then pick random
  */
 
-import { Card, CardPlayedEffectResponse, GameLoop } from "../types";
+import GameLoop, { Card, CardPlayedEffectResponse } from "../types";
 
 export default ({ playArea, banks }: GameLoop): CardPlayedEffectResponse => {
   const opponentBank = banks[0];

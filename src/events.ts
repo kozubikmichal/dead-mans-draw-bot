@@ -2,7 +2,7 @@ import CardPlacedToPlayArea from "./events/CardPlacedToPlayArea";
 import CardPlayedEffect from "./events/CardPlayedEffect";
 import CardRemovedFromBank from "./events/CardRemovedFromBank";
 import TurnEnded from "./events/TurnEnded";
-import { EventType, GameLoop } from "./types";
+import GameLoop, { EventType } from "./types";
 
 const noop = () => {};
 

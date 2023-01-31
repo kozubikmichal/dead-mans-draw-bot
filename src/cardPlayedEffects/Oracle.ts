@@ -14,7 +14,7 @@ card in the Draw Pile, the ability is nullified.
  * strategy: pick the card, only if it will not bust
  */
 
-import { CardPlayedEffectResponse, GameLoop } from "../types";
+import GameLoop, { CardPlayedEffectResponse } from "../types";
 
 export default ({ effect, playArea }: GameLoop): CardPlayedEffectResponse => {
   const topCard = effect!.cards[0];

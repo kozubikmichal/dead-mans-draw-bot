@@ -1,4 +1,4 @@
-import CardStack from "./CardStack";
+export { default } from "./GameLoop";
 
 export type Suit =
   | "Anchor"
@@ -58,13 +58,4 @@ export type CardPlayedEffectResponse = {
     effectType: Suit;
     card: Card | null;
   };
-};
-
-export type GameLoop = {
-  playArea: CardStack;
-  banks: CardStack[];
-  discardPile: CardStack;
-  drawPile: CardStack;
-  event?: Event;
-  effect?: Effect;
 };
