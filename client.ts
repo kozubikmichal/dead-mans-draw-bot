@@ -154,7 +154,6 @@ async function play_a_match(match) {
 
 
       if (pendingEffect) {
-        console.log('pendingEffect: ', pendingEffect);
         useraction =
           cardPlayedEffect(match.state.pendingEffect, gameLoop) || Draw;
         pendingEffect = null;
