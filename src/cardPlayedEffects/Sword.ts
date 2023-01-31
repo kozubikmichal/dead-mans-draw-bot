@@ -7,31 +7,35 @@ Bank, even if the chosen card will cause you
 to Bust.
  */
 
-// strategy: check Oracle, check Marmaid, then pick random
+/**
+ * strategy: check Oracle, check Mermaid, then pick random
+ */
 
-export default ({ playArea, banks }) => {
-  const bank = banks[0];
+import { Card, CardPlayedEffectResponse, GameLoop } from "../types";
+
+export default ({ playArea, banks }: GameLoop): CardPlayedEffectResponse => {
+  const opponentBank = banks[0];
   const myBank = banks[1];
-  let card = null;
+  let card: Card | null = null;
 
   if (
     !playArea.contains("Oracle") &&
     !myBank.contains("Oracle") &&
-    bank.contains("Oracle")
+    opponentBank.contains("Oracle")
   ) {
-    card = bank.findHighest("Oracle");
+    card = opponentBank.findHighest("Oracle");
   } else if (
-    !playArea.contains("Marmaid") &&
-    myBank.contains("Marmaid") &&
-    bank.contains("Marmaid")
+    !playArea.contains("Mermaid") &&
+    myBank.contains("Mermaid") &&
+    opponentBank.contains("Mermaid")
   ) {
-    card = bank.findHighest("Marmaid");
+    card = opponentBank.findHighest("Mermaid");
   } else {
     card =
-      bank.cards.find(
+      opponentBank.cards.find(
         (bankCard) =>
           !playArea.contains(bankCard.suit) && !myBank.contains(bankCard.suit)
-      ) || enemyBoard.cards[0];
+      ) || opponentBank.cards[0];
   }
 
   return {

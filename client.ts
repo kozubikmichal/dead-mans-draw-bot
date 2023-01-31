@@ -1,3 +1,5 @@
+import GameLoop from "./src/GameLoop";
+
 var Spc22Arena = require("spc22_arena");
 const pressAnyKey = require("press-any-key");
 const params = require("yargs")
@@ -77,7 +79,7 @@ async function wait_for_active_match() {
   var gameapi = new Spc22Arena.GameApi();
   var opts = { at: "today", wait: "1", active: "1" };
 
-  let matches = null;
+  let matches: null | any[] = null;
   console.log(
     `\n${"=".repeat(80)}\nWaiting for matches where player ${
       basic.username
@@ -124,8 +126,8 @@ async function play_a_match(match) {
     );
     //-- TURN: Draw a few cards
     while (isMatchRunning) {
-      useraction = { etype: "Draw", autopick: true };
-      opts = { wait: "1" };
+      let useraction = { etype: "Draw", autopick: true };
+      let opts = { wait: "1" };
       //opts = { autopick: "all" };
       try {
         if (params.wait) await pressAnyKey().then(); //'Press any key to continue...'
@@ -135,7 +137,7 @@ async function play_a_match(match) {
         // for this I call the executeActionForMatch API call (POST /api/matches) and implement the long-polling wait there with 200/409 status.
         // NOTE: Another feasible choice is to call the getMatch with waitactive=true parameter (GET /api/matches/<matchid>?waitactive=true) and implement the long-polling wait there with 200/409 status
         // whis would enable you to first check what the other player has done, the execute the drawing of card
-        doRetryDrawMove = true;
+        let doRetryDrawMove = true;
         //-- DRAW: successful carddraw
         while (doRetryDrawMove) {
           lastmove = await gameapi
@@ -168,7 +170,7 @@ async function play_a_match(match) {
         //-- based on a random factor we might initiate ending the turn - this is where you need to make it much smarter :)
         if (Math.random() * 10 < 3) {
           console.info("Ending turn...");
-          enduseraction = { etype: "EndTurn", autopick: true };
+          let enduseraction = { etype: "EndTurn", autopick: true };
           lastmove = await gameapi
             .executeActionForMatch(matchid, enduseraction, opts)
             .then((result) => {
@@ -178,9 +180,12 @@ async function play_a_match(match) {
           break;
         }
       } catch (err) {
+        //@ts-ignore
         if (err.status) {
+          //@ts-ignore
           console.error(err?.status, err?.response?.text);
           try {
+            //@ts-ignore
             const jsonobj = JSON.parse(err?.response?.text)?.events;
             if (jsonobj) lastmove = jsonobj;
           } catch {}
@@ -192,7 +197,7 @@ async function play_a_match(match) {
   } //-- end:MATCH
 
   //-- read match end status and display
-  ri_matchend = move_has_event(lastmove, _matcheventyypes.MatchEnded);
+  let ri_matchend = move_has_event(lastmove, _matcheventyypes.MatchEnded);
   if (ri_matchend) {
     const endstatus =
       typeof ri_matchend.matchEndedWinnerIdx !== "number"

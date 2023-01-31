@@ -10,10 +10,14 @@ ing to Collect instead. If the Oracle is the last
 card in the Draw Pile, the ability is nullified.
  */
 
-// strategy: pick the card, only if it will not bust
+/**
+ * strategy: pick the card, only if it will not bust
+ */
 
-export default ({ effect, playArea }) => {
-  const topCard = effect.cards[0];
+import { CardPlayedEffectResponse, GameLoop } from "../types";
+
+export default ({ effect, playArea }: GameLoop): CardPlayedEffectResponse => {
+  const topCard = effect!.cards[0];
   const wouldBust = playArea.contains(topCard.suite);
   const card = wouldBust ? null : topCard;
 

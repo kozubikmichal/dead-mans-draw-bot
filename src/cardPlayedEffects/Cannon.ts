@@ -4,9 +4,13 @@
 	If there are not any cards in any opponent’s Bank, this Suit Ability is nullified.
  */
 
-// Strategy: remove the highest card on opponents hand
+/**
+ * strategy: remove the highest card on opponents hand
+ */
 
-export default ({ banks }) => {
+import { CardPlayedEffectResponse, GameLoop } from "../types";
+
+export default ({ banks }: GameLoop): CardPlayedEffectResponse => {
   const bank = banks[0];
   const card = bank.findHighestAny();
 

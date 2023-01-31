@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "SAP Labs CEE Hub 2023 Programming Competition NodeJs Example Client",
   "license": "ISC",
-  "main": "_example_client_nodejs.js",
+  "main": "dist/client.js",
   "dependencies": {
     "press-any-key": "^0.1.1",
     "slcee_2023_pc_arena": "file:lib",
@@ -12,8 +12,14 @@
     "yargs": "^17.6.2"
   },
   "scripts": {
+    "build": "tsc",
     "npmlink": "npm link ./lib",
     "devstart": "node .",
-    "start": "npm run npmlink devstart"
+    "start": "npm run npmlink devstart",
+    "watch": "tsc -w"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "typescript": "^4.9.5"
   }
 }
