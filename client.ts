@@ -119,7 +119,7 @@ async function play_a_match(match) {
   let turncount = 0;
   let isMatchRunning = true;
   let lastmove = undefined;
-  let myIndex = 1; match.playerids.indexOf(basic.username);
+  let myIndex = match.playerids.indexOf(basic.username);
   let gameLoop = new GameLoop(myIndex, match);
 
   let pendingEffect =
