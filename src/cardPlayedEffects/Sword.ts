@@ -15,27 +15,24 @@ import CardStack from "../CardStack";
 import GameLoop, { Card, CardPlayedEffectResponse, Effect } from "../types";
 
 export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
-  let card: Card | null = null;
   const { playArea, myBank, opponentBank } = game;
+
   const possibleCards = new CardStack(
     opponentBank.cards.filter((card) => !myBank.contains(card.suit))
   );
 
-  if (!playArea.contains("Oracle") && possibleCards.contains("Oracle")) {
-    card = possibleCards.findHighest("Oracle");
-  } else if (
-    !playArea.contains("Mermaid") &&
-    possibleCards.contains("Mermaid")
-  ) {
-    card = possibleCards.findHighest("Mermaid");
-  } else {
-    card =
-      possibleCards.cards.find(
-        (bankCard) => !playArea.contains(bankCard.suit)
-      ) || possibleCards.cards[0];
+  const nonBustingCards = new CardStack(
+    possibleCards.cards.filter((card) => !playArea.contains(card.suit))
+  );
 
-    card = possibleCards.findHighest(card.suit);
-  }
+  // search non-busting cards -> Oracle / Mermaid / highest
+  // otherwise pick the highest card in opponent's hand (if any)
+  const card =
+    nonBustingCards.findHighest("Oracle") ||
+    nonBustingCards.findHighest("Mermaid") ||
+    nonBustingCards.findHighestAny() ||
+    opponentBank.findHighestAny() ||
+    null;
 
   return {
     etype: "ResponseToEffect",

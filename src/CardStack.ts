@@ -34,10 +34,10 @@ export default class CardStack {
   }
 
   findHighestAny(): Card | null {
-    let result = this.cards[0];
+    let result: Card | null = null;
 
     this.cards.forEach((item) => {
-      if (item.value > result.value) {
+      if (item.value > (result?.value || 0)) {
         result = item;
       }
     });

@@ -115,12 +115,14 @@ async function play_a_match(match) {
   let turncount = 0;
   let isMatchRunning = true;
   let lastmove = undefined;
-  let gameLoop = new GameLoop(match.activePlayerIndex, match);
+  let myIndex = match.playerids.indexOf(basic.username);
+  let gameLoop = new GameLoop(myIndex, match);
   let pendingEffect =
-    match.state.currentPlayerIndex === match.activePlayerIndex &&
-    match.state.pendingEffect;
+    match.state.currentPlayerIndex === myIndex && match.state.pendingEffect;
 
-  console.log(match.state);
+  console.log(match);
+  console.log(gameLoop.myBank, gameLoop.opponentBank, gameLoop.playArea);
+  await pressAnyKey().then();
 
   // console.log("match", match);
 
