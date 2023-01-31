@@ -1,6 +1,7 @@
 import cardPlayedEffect from "./src/cardPlayedEffect";
 import { processEvents } from "./src/events";
 import GameLoop from "./src/GameLoop";
+require('dotenv').config()
 
 console.log = () => process.stdout.write(".");
 
@@ -10,11 +11,13 @@ const params = require("yargs")
   .option("u", {
     alias: "username",
     demandOption: false,
+    default: process.env.USERNAME,
     type: "string",
   })
   .option("p", {
     alias: "password",
     demandOption: false,
+    default: process.env.PASSWORD,
     type: "string",
   })
   .option("m", {
@@ -79,14 +82,13 @@ async function get_match_by_id(matchid) {
   return retval;
 }
 
-async function wait_for_active_match() {
+export async function wait_for_active_match() {
   var gameapi = new Spc22Arena.GameApi();
   var opts = { at: "today", wait: "1", active: "1" };
 
   let matches: null | any[] = null;
   console.log(
-    `\n${"=".repeat(80)}\nWaiting for matches where player ${
-      basic.username
+    `\n${"=".repeat(80)}\nWaiting for matches where player ${basic.username
     } is active...`
   );
   while (!(Array.isArray(matches) && matches?.length > 0)) {
@@ -117,10 +119,12 @@ async function play_a_match(match) {
   let turncount = 0;
   let isMatchRunning = true;
   let lastmove = undefined;
-  let myIndex = match.playerids.indexOf(basic.username);
+  let myIndex = 1; match.playerids.indexOf(basic.username);
   let gameLoop = new GameLoop(myIndex, match);
+
   let pendingEffect =
     match.state.currentPlayerIndex === myIndex && match.state.pendingEffect;
+
 
   console.log(match);
   console.log(gameLoop.myBank, gameLoop.opponentBank, gameLoop.playArea);
@@ -141,14 +145,16 @@ async function play_a_match(match) {
     );
     //-- TURN: Draw a few cards
 
-    const Draw = { etype: "Draw" };
+    const Draw = { etype: "Draw", autopick: true };
     let useraction: any = Draw;
 
     while (isMatchRunning) {
       let opts = { wait: "1" };
       //opts = { autopick: "all" };
 
+
       if (pendingEffect) {
+        console.log('pendingEffect: ', pendingEffect);
         useraction =
           cardPlayedEffect(match.state.pendingEffect, gameLoop) || Draw;
         pendingEffect = null;
@@ -219,7 +225,7 @@ async function play_a_match(match) {
             //@ts-ignore
             const jsonobj = JSON.parse(err?.response?.text)?.events;
             if (jsonobj) lastmove = jsonobj;
-          } catch {}
+          } catch { }
         } else console.log("Error", err);
         isMatchRunning = false;
         break;
@@ -235,8 +241,8 @@ async function play_a_match(match) {
         ? "TIE"
         : match.playerids[ri_matchend.matchEndedWinnerIdx]?.toString() ===
           basic.username
-        ? "WON"
-        : "LOST";
+          ? "WON"
+          : "LOST";
     console.log(
       `\nMATCHEND [${matchid}]: ${endstatus}`,
       `winnerIdx:${ri_matchend.matchEndedWinnerIdx} scores:${ri_matchend.matchEndedScores}`

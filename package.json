@@ -5,6 +5,7 @@
   "license": "ISC",
   "main": "dist/client.js",
   "dependencies": {
+    "dotenv": "16.0.3",
     "press-any-key": "^0.1.1",
     "slcee_2023_pc_arena": "file:lib",
     "slhpc23_arena": "file:lib",
@@ -15,8 +16,10 @@
     "build": "tsc",
     "npmlink": "npm link ./lib",
     "devstart": "node .",
+    "start:dummy": "node .  -u 000000000000000000000000 -p dummypass",
     "start": "npm run npmlink devstart",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "spam:matches": "node ./dist/createMatches.js"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",

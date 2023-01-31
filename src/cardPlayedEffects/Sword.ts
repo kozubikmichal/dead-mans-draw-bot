@@ -25,14 +25,21 @@ export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
     possibleCards.cards.filter((card) => !playArea.contains(card.suit))
   );
 
-  // search non-busting cards -> Oracle / Mermaid / highest
-  // otherwise pick the highest card in opponent's hand (if any)
-  const card =
-    nonBustingCards.findHighest("Oracle") ||
-    nonBustingCards.findHighest("Mermaid") ||
-    nonBustingCards.findHighestAny() ||
-    opponentBank.findHighestAny() ||
-    null;
+  let card: Card | null = null;
+
+  if (nonBustingCards.cards.length === 0) {
+    card = new CardStack(possibleCards.cards).findHighestAny()
+  } else {
+    // search non-busting cards -> Oracle / Mermaid / highest
+    // otherwise pick the highest card in opponent's hand (if any)
+    // Evgenii's note: you can not pick any from opponents hand, only from possibles
+    card =
+      nonBustingCards.findHighest("Oracle") ||
+      nonBustingCards.findHighest("Mermaid") ||
+      nonBustingCards.findHighestAny() ||
+      null;
+
+  }
 
   return {
     etype: "ResponseToEffect",
