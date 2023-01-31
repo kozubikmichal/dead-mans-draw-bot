@@ -31,6 +31,7 @@ export type Card = {
 
 export type Effect = {
   effectType: Suit;
+  cards: Card[];
   [key: string]: any;
 };
 

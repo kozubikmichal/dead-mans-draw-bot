@@ -27,6 +27,10 @@ export default class CardStack {
     return result;
   }
 
+  findHighestValue(suit: Suit): number {
+    return this.findHighest(suit)?.value || 0;
+  }
+
   findHighestAny(): Card | null {
     let result = this.cards[0];
 

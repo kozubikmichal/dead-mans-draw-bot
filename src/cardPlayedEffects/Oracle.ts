@@ -18,7 +18,7 @@ import GameLoop, { CardPlayedEffectResponse } from "../types";
 
 export default ({ effect, playArea }: GameLoop): CardPlayedEffectResponse => {
   const topCard = effect!.cards[0];
-  const wouldBust = playArea.contains(topCard.suite);
+  const wouldBust = playArea.contains(topCard.suit);
   const card = wouldBust ? null : topCard;
 
   return {
