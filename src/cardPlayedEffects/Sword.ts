@@ -13,11 +13,9 @@ to Bust.
 
 import GameLoop, { Card, CardPlayedEffectResponse, Effect } from "../types";
 
-export default (
-  effect: Effect,
-  { playArea, opponentBank, myBank }: GameLoop
-): CardPlayedEffectResponse => {
+export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
   let card: Card | null = null;
+  const { playArea, myBank, opponentBank } = game;
 
   if (
     !playArea.contains("Oracle") &&

@@ -32,21 +32,19 @@ export default class GameLoop {
   drawPile = new CardStack();
   myBank!: CardStack;
   opponentBank!: CardStack;
-  myIndex: number;
 
   mustDraw = 0;
+  mustEndTurn = false;
 
-  constructor(myId: string, match: Match) {
-    this.myIndex = match.playerids.indexOf(myId);
-
+  constructor(myIndex: number, match: Match) {
     this.playArea = new CardStack(match.state.playArea);
     this.banks = [
       bankFromState(match.state.banks[0]),
       bankFromState(match.state.banks[1]),
     ];
 
-    this.myBank = this.banks[this.myIndex];
-    this.opponentBank = this.banks[1 - this.myIndex];
+    this.myBank = this.banks[myIndex];
+    this.opponentBank = this.banks[1 - myIndex];
   }
 
   reset() {
@@ -59,6 +57,10 @@ export default class GameLoop {
   nextAction() {
     if (this.mustDraw > 0) {
       return Draw;
+    }
+    if (this.mustEndTurn) {
+      this.mustEndTurn = false;
+      return EndTurn;
     }
     if (
       this.playArea.getLastCard()?.suit === "Anchor" &&

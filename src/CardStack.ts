@@ -1,4 +1,4 @@
-import { Card, Suit } from "./types";
+import { Card, Delta, Suit } from "./types";
 
 export default class CardStack {
   cards: Card[] = [];
@@ -65,7 +65,7 @@ export default class CardStack {
     );
   }
 
-  processDelta({ added, removed }: { added?: Card[]; removed?: Card[] }) {
+  processDelta({ added, removed }: Delta) {
     (removed || []).forEach((card) => this.remove(card));
     (added || [])
       .filter((card) => !this.containsCard(card))

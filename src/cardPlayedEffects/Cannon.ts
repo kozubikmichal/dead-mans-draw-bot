@@ -10,11 +10,8 @@
 
 import GameLoop, { CardPlayedEffectResponse, Effect } from "../types";
 
-export default (
-  effect: Effect,
-  { opponentBank }: GameLoop
-): CardPlayedEffectResponse => {
-  const card = opponentBank.findHighestAny();
+export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
+  const card = game.opponentBank.findHighestAny();
 
   return {
     etype: "ResponseToEffect",

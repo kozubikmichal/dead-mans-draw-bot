@@ -40,22 +40,20 @@ export type Delta = {
   removed?: Card[];
 };
 
+export type DeltaEvent = {
+  banks: Delta[];
+  discardPile: Delta;
+  drawPile: Delta;
+};
+
 export type Event = {
   eventType: EventType;
   cardPlacedToPlayAreaCard: Card;
   cardPlayedEffect: Effect;
   cardRemovedFromBankIndex: number;
   cardRemovedFromBankCard: Card;
-  turnEndedDelta: {
-    banks: Delta[];
-    discardPile: Delta;
-    drawPile: Delta;
-  };
-  turnStartedDelta: {
-    banks: Delta[];
-    discardPile: Delta;
-    drawPile: Delta;
-  };
+  turnEndedDelta: DeltaEvent;
+  turnStartedDelta: DeltaEvent;
 };
 
 export type CardPlayedEffectResponse = {

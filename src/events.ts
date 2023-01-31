@@ -3,6 +3,7 @@ import CardPlayedEffect from "./events/CardPlayedEffect";
 import CardRemovedFromBank from "./events/CardRemovedFromBank";
 import MatchEnded from "./events/MatchEnded";
 import TurnEnded from "./events/TurnEnded";
+import TurnStarted from "./events/TurnStarted";
 import GameLoop, { EventType, Event } from "./types";
 
 const noop = () => {};
@@ -12,9 +13,9 @@ const handlers: { [key in EventType]: Function } = {
   CardPlayedEffect,
   CardRemovedFromBank,
   TurnEnded,
+  TurnStarted,
   MatchEnded,
   MatchStarted: noop,
-  TurnStarted: noop,
   Draw: noop,
   ResponseToEffect: noop,
   Comment: noop,

@@ -9,11 +9,10 @@ export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
 
   if (possibleCards.length > 0) {
     card = possibleCards.sort((cardA, cardB) => {
-      return (
-        cardA.value -
-        game.myBank.findHighestValue(cardA.suit) -
-        (cardB.value - game.myBank.findHighestValue(cardB.suit))
-      );
+      return cardA.value - game.myBank.findHighestValue(cardA.suit) >
+        cardB.value - game.myBank.findHighestValue(cardB.suit)
+        ? 1
+        : -1;
     })[0];
   }
 

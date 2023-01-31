@@ -4,6 +4,7 @@ export default (event: Event, game: GameLoop) => {
   const delta = event.turnStartedDelta;
 
   game.mustDraw = 0;
+  game.mustEndTurn = false;
   game.playArea.clear();
   game.banks[0].processDelta(delta.banks[0]);
   game.banks[1].processDelta(delta.banks[1]);

@@ -16,13 +16,11 @@ card in the Draw Pile, the ability is nullified.
 
 import GameLoop, { CardPlayedEffectResponse, Effect } from "../types";
 
-export default (
-  effect: Effect,
-  { playArea }: GameLoop
-): CardPlayedEffectResponse => {
+export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
   const topCard = effect.cards[0];
-  const wouldBust = playArea.contains(topCard.suit);
+  const wouldBust = game.playArea.contains(topCard.suit);
   const card = wouldBust ? null : topCard;
+  game.mustEndTurn = true;
 
   return {
     etype: "ResponseToEffect",
