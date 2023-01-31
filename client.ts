@@ -2,6 +2,8 @@ import cardPlayedEffect from "./src/cardPlayedEffect";
 import { processEvents } from "./src/events";
 import GameLoop from "./src/GameLoop";
 
+console.log = () => process.stdout.write(".");
+
 var Spc22Arena = require("spc22_arena");
 const pressAnyKey = require("press-any-key");
 const params = require("yargs")
@@ -158,7 +160,7 @@ async function play_a_match(match) {
         console.log("mustDraw", gameLoop.mustDraw);
         console.log("sending", useraction);
         if (params.wait) await pressAnyKey().then(); //'Press any key to continue...'
-        console.info("Drawing a new card");
+        console.info("BOT Action: ", useraction.etype);
 
         // NOTE: Here I choose to perform a "draw of card" whatever happens in the meantime,
         // for this I call the executeActionForMatch API call (POST /api/matches) and implement the long-polling wait there with 200/409 status.
