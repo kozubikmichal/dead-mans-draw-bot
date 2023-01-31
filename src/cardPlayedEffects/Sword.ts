@@ -11,30 +11,30 @@ to Bust.
  * strategy: check Oracle, check Mermaid, then pick random
  */
 
+import CardStack from "../CardStack";
 import GameLoop, { Card, CardPlayedEffectResponse, Effect } from "../types";
 
 export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
   let card: Card | null = null;
   const { playArea, myBank, opponentBank } = game;
+  const possibleCards = new CardStack(
+    opponentBank.cards.filter((card) => !myBank.contains(card.suit))
+  );
 
-  if (
-    !playArea.contains("Oracle") &&
-    !myBank.contains("Oracle") &&
-    opponentBank.contains("Oracle")
-  ) {
-    card = opponentBank.findHighest("Oracle");
+  if (!playArea.contains("Oracle") && possibleCards.contains("Oracle")) {
+    card = possibleCards.findHighest("Oracle");
   } else if (
     !playArea.contains("Mermaid") &&
-    myBank.contains("Mermaid") &&
-    opponentBank.contains("Mermaid")
+    possibleCards.contains("Mermaid")
   ) {
-    card = opponentBank.findHighest("Mermaid");
+    card = possibleCards.findHighest("Mermaid");
   } else {
     card =
-      opponentBank.cards.find(
-        (bankCard) =>
-          !playArea.contains(bankCard.suit) && !myBank.contains(bankCard.suit)
-      ) || opponentBank.cards[0];
+      possibleCards.cards.find(
+        (bankCard) => !playArea.contains(bankCard.suit)
+      ) || possibleCards.cards[0];
+
+    card = possibleCards.findHighest(card.suit);
   }
 
   return {
