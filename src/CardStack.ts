@@ -1,10 +1,12 @@
 import { Card, Delta, Suit } from "./types";
 
 export default class CardStack {
+  private cardsAfterLastDelta: Card[] = [];
   cards: Card[] = [];
 
   constructor(cards: Card[] = []) {
     this.cards = cards;
+    this.cardsAfterLastDelta = [...cards];
   }
 
   add(card: Card): void {
@@ -66,10 +68,14 @@ export default class CardStack {
   }
 
   processDelta({ added, removed }: Delta) {
+    this.cards = this.cardsAfterLastDelta;
+
     (removed || []).forEach((card) => this.remove(card));
     (added || [])
       .filter((card) => !this.containsCard(card))
       .forEach((card) => this.add(card));
+
+    this.cardsAfterLastDelta = [...this.cards];
   }
 
   clear() {
