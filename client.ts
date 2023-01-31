@@ -145,7 +145,7 @@ async function play_a_match(match) {
     );
     //-- TURN: Draw a few cards
 
-    const Draw = { etype: "Draw", autopick: true };
+    const Draw = { etype: "Draw" };
     let useraction: any = Draw;
 
     while (isMatchRunning) {
