@@ -3,7 +3,9 @@ import { Card, Suit } from "./types";
 export default class CardStack {
   cards: Card[] = [];
 
-  constructor() {}
+  constructor(cards: Card[] = []) {
+    this.cards = cards;
+  }
 
   add(card: Card): void {
     this.cards = this.cards.concat(card);
@@ -55,12 +57,26 @@ export default class CardStack {
     return Boolean(this.cards.find((item) => item.suit === suit));
   }
 
+  containsCard(card: Card): boolean {
+    return Boolean(
+      this.cards.find(
+        (item) => item.suit === card.suit && item.value === card.value
+      )
+    );
+  }
+
   processDelta({ added, removed }: { added?: Card[]; removed?: Card[] }) {
     (removed || []).forEach((card) => this.remove(card));
-    (added || []).forEach((card) => this.add(card));
+    (added || [])
+      .filter((card) => !this.containsCard(card))
+      .forEach((card) => this.add(card));
   }
 
   clear() {
     this.cards = [];
+  }
+
+  getLastCard(): Card | undefined {
+    return this.cards[this.cards.length - 1];
   }
 }

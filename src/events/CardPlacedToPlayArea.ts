@@ -1,5 +1,5 @@
-import GameLoop from "../types";
+import GameLoop, { Event } from "../types";
 
-export default ({ event, playArea }: GameLoop) => {
-  playArea.add(event!.cardPlacedToPlayAreaCard);
+export default (event: Event, { playArea }: GameLoop) => {
+  playArea.add(event.cardPlacedToPlayAreaCard);
 };

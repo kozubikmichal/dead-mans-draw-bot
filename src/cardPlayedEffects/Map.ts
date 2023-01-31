@@ -1,10 +1,9 @@
 import GameLoop from "../GameLoop";
-import { CardPlayedEffectResponse } from "../types";
+import { CardPlayedEffectResponse, Effect } from "../types";
 
-export default (game: GameLoop): CardPlayedEffectResponse => {
-  const myBank = game.banks[0];
-  let card = game.effect!.cards[0];
-  const possibleCards = game.effect!.cards.filter(
+export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
+  let card = effect.cards[0];
+  const possibleCards = effect.cards.filter(
     (card) => !game.playArea.contains(card.suit)
   );
 
@@ -12,8 +11,8 @@ export default (game: GameLoop): CardPlayedEffectResponse => {
     card = possibleCards.sort((cardA, cardB) => {
       return (
         cardA.value -
-        myBank.findHighestValue(cardA.suit) -
-        (cardB.value - myBank.findHighestValue(cardB.suit))
+        game.myBank.findHighestValue(cardA.suit) -
+        (cardB.value - game.myBank.findHighestValue(cardB.suit))
       );
     })[0];
   }

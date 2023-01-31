@@ -51,12 +51,31 @@ export type Event = {
     discardPile: Delta;
     drawPile: Delta;
   };
+  turnStartedDelta: {
+    banks: Delta[];
+    discardPile: Delta;
+    drawPile: Delta;
+  };
 };
 
 export type CardPlayedEffectResponse = {
   etype: "ResponseToEffect";
-  effect: {
+  effect?: {
     effectType: Suit;
     card: Card | null;
+  };
+  autipick?: boolean;
+};
+
+export type BankState = {
+  [key in Suit]: number[];
+};
+
+export type Match = {
+  _id: string;
+  playerids: string[];
+  state: {
+    banks: BankState[];
+    playArea: Card[];
   };
 };

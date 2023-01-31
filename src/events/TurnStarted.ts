@@ -1,7 +1,7 @@
 import GameLoop, { Event } from "../types";
 
 export default (event: Event, game: GameLoop) => {
-  const delta = event.turnEndedDelta;
+  const delta = event.turnStartedDelta;
 
   game.mustDraw = 0;
   game.playArea.clear();

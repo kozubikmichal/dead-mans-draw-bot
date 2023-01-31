@@ -11,11 +11,12 @@ to Bust.
  * strategy: check Oracle, check Mermaid, then pick random
  */
 
-import GameLoop, { Card, CardPlayedEffectResponse } from "../types";
+import GameLoop, { Card, CardPlayedEffectResponse, Effect } from "../types";
 
-export default ({ playArea, banks }: GameLoop): CardPlayedEffectResponse => {
-  const opponentBank = banks[0];
-  const myBank = banks[1];
+export default (
+  effect: Effect,
+  { playArea, opponentBank, myBank }: GameLoop
+): CardPlayedEffectResponse => {
   let card: Card | null = null;
 
   if (

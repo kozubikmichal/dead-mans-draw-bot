@@ -2,32 +2,36 @@ import Oracle from "./cardPlayedEffects/Oracle";
 import Sword from "./cardPlayedEffects/Sword";
 import Cannon from "./cardPlayedEffects/Cannon";
 import Map from "./cardPlayedEffects/Map";
-import GameLoop, { CardPlayedEffectResponse, Suit } from "./types";
+import GameLoop, { CardPlayedEffectResponse, Effect, Suit } from "./types";
+import Kraken from "./cardPlayedEffects/Kraken";
 
 const noop = (effectType: Suit) => () =>
   ({
     etype: "ResponseToEffect",
-    effect: {
-      effectType,
-      card: null,
-      autopick: true,
-    },
+    autopick: "true",
   } as CardPlayedEffectResponse);
 
-const effects: { [key in Suit]: (game: GameLoop) => CardPlayedEffectResponse } =
-  {
-    Oracle: Oracle,
-    Sword,
-    Cannon,
-    Map,
-    Anchor: noop("Anchor"),
-    Chest: noop("Chest"),
-    Hook: noop("Hook"),
-    Key: noop("Key"),
-    Kraken: noop("Kraken"),
-    Mermaid: noop("Mermaid"),
-  };
+const handlers: {
+  [key in Suit]: (
+    effect: Effect,
+    game: GameLoop
+  ) => CardPlayedEffectResponse | any;
+} = {
+  Oracle: Oracle,
+  Sword,
+  Cannon,
+  Map,
+  Kraken,
+  Anchor: noop("Anchor"),
+  Chest: noop("Chest"),
+  Hook: noop("Hook"),
+  Key: noop("Key"),
+  Mermaid: noop("Mermaid"),
+};
 
-export default (game: GameLoop): CardPlayedEffectResponse => {
-  return effects[game.effect!.effectType](game);
+export default (
+  effect: Effect,
+  game: GameLoop
+): CardPlayedEffectResponse | any => {
+  return handlers[effect.effectType](effect, game);
 };

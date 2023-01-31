@@ -1,3 +1,5 @@
+import cardPlayedEffect from "./src/cardPlayedEffect";
+import { processEvents } from "./src/events";
 import GameLoop from "./src/GameLoop";
 
 var Spc22Arena = require("spc22_arena");
@@ -113,6 +115,15 @@ async function play_a_match(match) {
   let turncount = 0;
   let isMatchRunning = true;
   let lastmove = undefined;
+  let gameLoop = new GameLoop(params.username, match);
+  let pendingEffect =
+    match.state.currentPlayerIndex === gameLoop.myIndex &&
+    match.state.pendingEffect;
+
+  console.log(match.state);
+
+  // console.log("match", match);
+
   while (isMatchRunning) {
     //-- guard match ended
     if (move_has_event(lastmove, _matcheventyypes.MatchEnded)) {
@@ -125,11 +136,25 @@ async function play_a_match(match) {
       `\n=== TURN #${++turncount} ==================================`
     );
     //-- TURN: Draw a few cards
+
+    const Draw = { etype: "Draw" };
+    let useraction: any = Draw;
+
     while (isMatchRunning) {
-      let useraction = { etype: "Draw", autopick: true };
       let opts = { wait: "1" };
       //opts = { autopick: "all" };
+
+      if (pendingEffect) {
+        useraction =
+          cardPlayedEffect(match.state.pendingEffect, gameLoop) || Draw;
+        pendingEffect = null;
+      }
+
       try {
+        console.log("myBank", gameLoop.myBank);
+        console.log("opponentBank", gameLoop.opponentBank);
+        console.log("mustDraw", gameLoop.mustDraw);
+        console.log("sending", useraction);
         if (params.wait) await pressAnyKey().then(); //'Press any key to continue...'
         console.info("Drawing a new card");
 
@@ -160,6 +185,8 @@ async function play_a_match(match) {
             });
         } //-- end:DRAW
 
+        useraction = processEvents(lastmove as any, gameLoop);
+
         //-- check whether turn has ended by itself (bust or matchend)
         if (move_has_event(lastmove, _matcheventyypes.TurnEnded)) break;
         if (move_has_event(lastmove, _matcheventyypes.MatchEnded)) {
@@ -168,17 +195,17 @@ async function play_a_match(match) {
         }
 
         //-- based on a random factor we might initiate ending the turn - this is where you need to make it much smarter :)
-        if (Math.random() * 10 < 3) {
-          console.info("Ending turn...");
-          let enduseraction = { etype: "EndTurn", autopick: true };
-          lastmove = await gameapi
-            .executeActionForMatch(matchid, enduseraction, opts)
-            .then((result) => {
-              console.log(JSON.stringify(result, null, 2));
-              return result;
-            });
-          break;
-        }
+        // if (Math.random() * 10 < 3) {
+        //   console.info("Ending turn...");
+        //   let enduseraction = { etype: "EndTurn", autopick: true };
+        //   lastmove = await gameapi
+        //     .executeActionForMatch(matchid, enduseraction, opts)
+        //     .then((result) => {
+        //       console.log(JSON.stringify(result, null, 2));
+        //       return result;
+        //     });
+        //   break;
+        // }
       } catch (err) {
         //@ts-ignore
         if (err.status) {

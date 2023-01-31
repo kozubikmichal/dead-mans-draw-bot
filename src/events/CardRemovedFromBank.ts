@@ -1,5 +1,10 @@
-import GameLoop from "../types";
+import GameLoop, { Event } from "../types";
 
-export default ({ event, banks }: GameLoop) => {
-  banks[event!.cardRemovedFromBankIndex].remove(event!.cardRemovedFromBankCard);
+export default (event: Event, game: GameLoop) => {
+  game.banks[event.cardRemovedFromBankIndex].remove(
+    event.cardRemovedFromBankCard
+  );
+  if (event.cardRemovedFromBankIndex === game.myIndex) {
+    game.mustDraw--;
+  }
 };
