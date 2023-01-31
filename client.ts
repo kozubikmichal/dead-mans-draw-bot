@@ -122,7 +122,7 @@ async function play_a_match(match) {
 
   console.log(match);
   console.log(gameLoop.myBank, gameLoop.opponentBank, gameLoop.playArea);
-  await pressAnyKey().then();
+  // await pressAnyKey().then();
 
   // console.log("match", match);
 
