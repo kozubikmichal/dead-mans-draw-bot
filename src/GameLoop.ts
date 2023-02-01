@@ -1,4 +1,5 @@
 import CardStack from "./CardStack";
+import { initialDiscardPile, initialDrawPile } from "./generators/pile";
 import Responses from "./responses";
 import { shouldEndTurn } from "./strategy";
 import { BankState, Card, Match, Suit } from "./types";
@@ -43,6 +44,9 @@ export default class GameLoop {
     this.opponentBank = this.banks[1 - myIndex];
     this.drawPileSize = match.drawPileSize;
     this.discardPileSize = match.discardPileSize;
+
+    this.drawPile = initialDrawPile();
+    this.discardPile = initialDiscardPile();
   }
 
   reset() {

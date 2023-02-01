@@ -23,8 +23,8 @@ export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
     card = possibleCards.sort((cardA, cardB) => {
       return cardA.value - game.myBank.findHighestValue(cardA.suit) >
         cardB.value - game.myBank.findHighestValue(cardB.suit)
-        ? 1
-        : -1;
+        ? -1
+        : 1;
     })[0];
   }
 
