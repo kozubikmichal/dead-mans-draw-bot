@@ -3,6 +3,7 @@ import { BankState, Card, Match, Suit } from "./types";
 
 const Draw = {
   etype: "Draw",
+  autopick: true,
 };
 
 const EndTurn = {
