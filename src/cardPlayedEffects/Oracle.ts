@@ -14,6 +14,7 @@ card in the Draw Pile, the ability is nullified.
  * strategy: pick the card, only if it will not bust
  */
 
+import Responses from "../responses";
 import GameLoop, { CardPlayedEffectResponse, Effect } from "../types";
 
 export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
@@ -22,11 +23,5 @@ export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
   const card = wouldBust ? null : topCard;
   game.mustEndTurn = true;
 
-  return {
-    etype: "ResponseToEffect",
-    effect: {
-      effectType: "Oracle",
-      card,
-    },
-  };
+  return Responses.ResponseToEffect("Oracle", card);
 };

@@ -8,16 +8,11 @@
  * strategy: remove the highest card on opponents hand
  */
 
+import Responses from "../responses";
 import GameLoop, { CardPlayedEffectResponse, Effect } from "../types";
 
 export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
   const card = game.opponentBank.findHighestAny();
 
-  return {
-    etype: "ResponseToEffect",
-    effect: {
-      effectType: "Cannon",
-      card,
-    },
-  };
+  return Responses.ResponseToEffect("Cannon", card);
 };
