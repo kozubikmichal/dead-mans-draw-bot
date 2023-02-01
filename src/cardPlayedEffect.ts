@@ -4,12 +4,9 @@ import Cannon from "./cardPlayedEffects/Cannon";
 import Map from "./cardPlayedEffects/Map";
 import GameLoop, { CardPlayedEffectResponse, Effect, Suit } from "./types";
 import Kraken from "./cardPlayedEffects/Kraken";
+import Responses from "./responses";
 
-const noop = (effectType: Suit) => () =>
-  ({
-    etype: "ResponseToEffect",
-    autopick: "true",
-  } as CardPlayedEffectResponse);
+const noop = (effectType: Suit) => () => Responses.AutoPickResponseToEffect();
 
 const handlers: {
   [key in Suit]: (

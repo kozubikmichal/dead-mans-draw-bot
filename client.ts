@@ -1,7 +1,8 @@
 import cardPlayedEffect from "./src/cardPlayedEffect";
 import { processEvents } from "./src/events";
 import GameLoop from "./src/GameLoop";
-require('dotenv').config()
+import Responses from "./src/responses";
+require("dotenv").config();
 
 console.log = () => process.stdout.write(".");
 
@@ -29,6 +30,11 @@ const params = require("yargs")
     alias: "w",
     demandOption: false,
     type: "boolean",
+  })
+  .option("tags", {
+    alias: "t",
+    demandOption: false,
+    type: "string",
   })
   .help().argv;
 
@@ -84,12 +90,15 @@ async function get_match_by_id(matchid) {
 
 export async function wait_for_active_match() {
   var gameapi = new Spc22Arena.GameApi();
-  var opts = { at: "today", wait: "1", active: "1" };
+  var opts: any = { at: "today", wait: "1", active: "1" };
+  if (params.tags) {
+    opts.tags = params.tags;
+  }
 
   let matches: null | any[] = null;
-  console.log(
+  console.info(
     `\n${"=".repeat(80)}\nWaiting for matches where player ${basic.username
-    } is active...`
+    } is active${params.tags ? " (tag: " + params.tags + ")" : ""}...`
   );
   while (!(Array.isArray(matches) && matches?.length > 0)) {
     matches = await gameapi.getMatches(opts);
@@ -146,13 +155,12 @@ async function play_a_match(match) {
     );
     //-- TURN: Draw a few cards
 
-    const Draw = { etype: "Draw" };
+    const Draw = Responses.Draw();
     let useraction: any = Draw;
 
     while (isMatchRunning) {
       let opts = { wait: "1" };
       //opts = { autopick: "all" };
-
 
       if (pendingEffect) {
         useraction =

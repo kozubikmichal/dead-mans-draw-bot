@@ -12,6 +12,7 @@ to Bust.
  */
 
 import CardStack from "../CardStack";
+import Responses from "../responses";
 import GameLoop, { Card, CardPlayedEffectResponse, Effect } from "../types";
 
 export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
@@ -28,7 +29,7 @@ export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
   let card: Card | null = null;
 
   if (nonBustingCards.cards.length === 0) {
-    card = new CardStack(possibleCards.cards).findHighestAny()
+    card = new CardStack(possibleCards.cards).findHighestAny();
   } else {
     // search non-busting cards -> Oracle / Mermaid / highest
     // otherwise pick the highest card in opponent's hand (if any)
@@ -38,14 +39,7 @@ export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
       nonBustingCards.findHighest("Mermaid") ||
       nonBustingCards.findHighestAny() ||
       null;
-
   }
 
-  return {
-    etype: "ResponseToEffect",
-    effect: {
-      effectType: "Sword",
-      card,
-    },
-  };
+  return Responses.ResponseToEffect("Sword", card);
 };
