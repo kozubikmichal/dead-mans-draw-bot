@@ -11,5 +11,24 @@ you do not have any cards in your Bank,
 this Suit Ability is nullified.
  */
 
+import CardStack from "../CardStack";
 import GameLoop from "../GameLoop";
+import Responses from "../responses";
 import { CardPlayedEffectResponse, Effect } from "../types";
+
+export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
+  const nonBustingCards = new CardStack(
+    game.myBank.cards.filter((card) => !game.playArea.contains(card.suit))
+  );
+
+  if (nonBustingCards.cards.length === 0) {
+    return Responses.AutoPickResponseToEffect();
+  }
+
+  const card =
+    nonBustingCards.findHighest("Oracle") ||
+    nonBustingCards.findHighest("Anchor") ||
+    nonBustingCards.findHighestAny();
+
+  return Responses.ResponseToEffect("Hook", card);
+};
