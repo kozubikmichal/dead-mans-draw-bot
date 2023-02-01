@@ -1,4 +1,16 @@
+/**
+Shuffle the Discard Pile and reveal three
+cards from the Discard Pile. You must place
+one card in the Play Area, even if this causes
+a Bust. If there are cards in the Discard Pile
+when the Map is drawn, the ability is nullified.
+If there are less than three cards, draw the re
+-
+maining cards.
+ */
+
 import GameLoop from "../GameLoop";
+import Responses from "../responses";
 import { CardPlayedEffectResponse, Effect } from "../types";
 
 export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
@@ -16,11 +28,5 @@ export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
     })[0];
   }
 
-  return {
-    etype: "ResponseToEffect",
-    effect: {
-      effectType: "Map",
-      card,
-    },
-  };
+  return Responses.ResponseToEffect("Map", card);
 };

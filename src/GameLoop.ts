@@ -1,15 +1,6 @@
 import CardStack from "./CardStack";
+import Responses from "./responses";
 import { BankState, Card, Match, Suit } from "./types";
-
-const Draw = {
-  etype: "Draw",
-  autopick: true,
-};
-
-const EndTurn = {
-  etype: "EndTurn",
-  autopick: true,
-};
 
 const bankFromState = (state: BankState) => {
   const cards: Card[] = [];
@@ -57,23 +48,23 @@ export default class GameLoop {
 
   nextAction() {
     if (this.mustDraw > 0) {
-      return Draw;
+      return Responses.Draw();
     }
     if (this.mustEndTurn) {
       this.mustEndTurn = false;
-      return EndTurn;
+      return Responses.EndTurn();
     }
     if (
       this.playArea.getLastCard()?.suit === "Anchor" &&
       this.playArea.cards.length < 8
     ) {
-      return Draw;
+      return Responses.Draw();
     }
 
     if (Math.random() * 10 < 3) {
-      return EndTurn;
+      return Responses.EndTurn();
     }
 
-    return Draw;
+    return Responses.Draw();
   }
 }

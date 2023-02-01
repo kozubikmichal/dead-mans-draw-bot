@@ -57,7 +57,7 @@ export type Event = {
 };
 
 export type CardPlayedEffectResponse = {
-  etype: "ResponseToEffect";
+  etype: string;
   effect?: {
     effectType: Suit;
     card: Card | null;
