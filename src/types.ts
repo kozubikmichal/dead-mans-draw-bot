@@ -76,4 +76,6 @@ export type Match = {
     banks: BankState[];
     playArea: Card[];
   };
+  drawPileSize: number;
+  discardPileSize: number;
 };

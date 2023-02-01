@@ -1,5 +1,6 @@
 import CardStack from "./CardStack";
 import Responses from "./responses";
+import { shouldEndTurn } from "./strategy";
 import { BankState, Card, Match, Suit } from "./types";
 
 const bankFromState = (state: BankState) => {
@@ -28,6 +29,9 @@ export default class GameLoop {
   mustDraw = 0;
   mustEndTurn = false;
 
+  drawPileSize = 50;
+  discardPileSize = 0;
+
   constructor(myIndex: number, match: Match) {
     this.playArea = new CardStack(match.state.playArea);
     this.banks = [
@@ -37,6 +41,8 @@ export default class GameLoop {
 
     this.myBank = this.banks[myIndex];
     this.opponentBank = this.banks[1 - myIndex];
+    this.drawPileSize = match.drawPileSize;
+    this.discardPileSize = match.discardPileSize;
   }
 
   reset() {
@@ -54,17 +60,7 @@ export default class GameLoop {
       this.mustEndTurn = false;
       return Responses.EndTurn();
     }
-    if (
-      this.playArea.getLastCard()?.suit === "Anchor" &&
-      this.playArea.cards.length < 8
-    ) {
-      return Responses.Draw();
-    }
 
-    if (Math.random() * 10 < 3) {
-      return Responses.EndTurn();
-    }
-
-    return Responses.Draw();
+    return shouldEndTurn(this) ? Responses.EndTurn() : Responses.Draw();
   }
 }
