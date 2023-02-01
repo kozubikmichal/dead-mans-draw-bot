@@ -125,6 +125,7 @@ async function play_a_match(match) {
   let pendingEffect =
     match.state.currentPlayerIndex === myIndex && match.state.pendingEffect;
 
+  const logs: any = [];
 
   console.log(match);
   console.log(gameLoop.myBank, gameLoop.opponentBank, gameLoop.playArea);

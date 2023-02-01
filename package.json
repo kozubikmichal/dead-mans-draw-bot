@@ -16,8 +16,8 @@
     "build": "tsc",
     "npmlink": "npm link ./lib",
     "devstart": "node .",
-    "start:dummy": "node .  -u 000000000000000000000000 -p dummypass",
-    "start": "npm run npmlink devstart",
+    "start:dummy": "node ./random_cards_bot.js  -u 000000000000000000000000 -p dummypass",
+    "start": "node ./random_cards_bot.js",
     "watch": "tsc -w",
     "spam:matches": "node ./dist/createMatches.js"
   },

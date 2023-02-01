@@ -40,10 +40,9 @@ basic.username = params.username;
 basic.password = params.password;
 
 export async function getActiveMatches() {
-    await new Promise(resolve => setTimeout(resolve, 2000));
     console.log("... polling ...")
 
-    var opts = { at: "today", active: "1" };
+    var opts = { at: "today", active: "1", wait: "1" };
 
     let matches: null | any[] = null;
 
@@ -62,24 +61,16 @@ export async function getActiveMatches() {
 }
 
 const program = async () => {
-    // const currentMatch = await gameApi.getMatch()
-    // while (true) {
-    const match = await getActiveMatches();
+    while (true) {
+        await new Promise(resolve => setTimeout(resolve, 45000));
 
-    // if (match) continue;
-
-
-    // if (!match) {
-    try {
-        const newMatch = await gameApi.createMatch(JSON.stringify({ playerids: ['000000000000000000000000', process.env.USERNAME], tags: ["learning-evaluating"] }))
-        console.log('newMatch: ', newMatch);
-
-    } catch (err) {
-        console.log('err: ', (err as any).response.text);
-
+        try {
+            const newMatch = await gameApi.createMatch(JSON.stringify({ playerids: ['000000000000000000000000', process.env.USERNAME], tags: ["learning-evaluating"] }))
+            console.log('newMatch: ', newMatch);
+        } catch (err) {
+            console.log('err: ', (err as any).response.text);
+        }
     }
-    // }
-    // }
 }
 
 program();
