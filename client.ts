@@ -139,8 +139,8 @@ async function play_a_match(match) {
   let turncount = 0;
   let isMatchRunning = true;
   let lastmove = undefined;
-  let myIndex = match.playerids.indexOf(basic.username);
-  let gameLoop = new GameLoop(myIndex, match);
+  let myIndex = match.playerids.indexOf('63cfb5630f032e987d2a7258');
+  let gameLoop = new GameLoop(myIndex, match, params.username === "000000000000000000000000");
 
   let pendingEffect = params.rand ? false :
     match.state.currentPlayerIndex === myIndex && match.state.pendingEffect;
@@ -253,16 +253,19 @@ async function play_a_match(match) {
         break;
       }
     } //-- end:TURN
-    gameLoop.logs[turncount].push({ mine: gameLoop.myBank.getValue(), opponent: gameLoop.opponentBank.getValue() } as any);
-    fs.writeFileSync(`./logs/${matchid}.json`, JSON.stringify({ moves: gameLoop.logs, matchid, mine: gameLoop.myBank.getValue(), opponent: gameLoop.opponentBank.getValue() }));
+    if (!gameLoop.imDummy) {
+      gameLoop.logs[turncount].push({ mine: gameLoop.myBank.getValue(), opponent: gameLoop.opponentBank.getValue() } as any);
+      fs.writeFileSync(`./logs/${matchid}.json`, JSON.stringify({ moves: gameLoop.logs, matchid, mine: gameLoop.myBank.getValue(), opponent: gameLoop.opponentBank.getValue() }));
+    }
 
     turncount = turncount + 1;
 
   } //-- end:MATCH
 
-  gameLoop.logs[turncount].push({ mine: gameLoop.myBank.getValue(), opponent: gameLoop.opponentBank.getValue() } as any);
-  fs.writeFileSync(`./logs/${matchid}.json`, JSON.stringify({ moves: gameLoop.logs, matchid, mine: gameLoop.myBank.getValue(), opponent: gameLoop.opponentBank.getValue() }));
-
+  if (!gameLoop.imDummy) {
+    gameLoop.logs[turncount].push({ mine: gameLoop.myBank.getValue(), opponent: gameLoop.opponentBank.getValue() } as any);
+    fs.writeFileSync(`./logs/${matchid}.json`, JSON.stringify({ moves: gameLoop.logs, matchid, mine: gameLoop.myBank.getValue(), opponent: gameLoop.opponentBank.getValue() }));
+  }
   //-- read match end status and display
   let ri_matchend = move_has_event(lastmove, _matcheventyypes.MatchEnded);
 
