@@ -48,7 +48,7 @@ export const evaluateBustRisk = (cards: Card[], drawPile: CardStack) => {
 }
 
 export const evaluateProfit = (playArea: CardStack, myHand: CardStack, drawPile: CardStack) => {
-  return playArea.cards.reduce((profit, card) => profit + Math.pow(card.value, 2) - Math.pow((myHand.findHighest(card.suit)?.value ?? 0), 2), 0)
+  return playArea.cards.reduce((profit, card) => profit + Math.max(card.value - myHand.findHighest(card.suit)?.value ?? 0), 0)
 }
 
 export const shouldEndTurn = (game: GameLoop): boolean => {
