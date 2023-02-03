@@ -1,1 +1,297 @@
-{"moves":{"0":[{"risk":0.1,"profitToRisk":40,"profit":4},{"risk":0.2,"profitToRisk":35,"profit":7},{"mine":0,"opponent":0}],"1":[{"risk":0.10638297872340426,"profitToRisk":37.6,"profit":4},{"risk":0.2127659574468085,"profitToRisk":51.7,"profit":11},{"risk":0.2978723404255319,"profitToRisk":53.714285714285715,"profit":16},{"mine":0,"opponent":0}],"2":[{"risk":0.06976744186046512,"profitToRisk":43,"profit":3},{"risk":0.18604651162790697,"profitToRisk":43,"profit":8},{"endTurn":true},{"mine":8,"opponent":0}],"3":[{"risk":0.12195121951219512,"profitToRisk":57.4,"profit":7},{"risk":0.21951219512195122,"profitToRisk":36.44444444444444,"profit":8},{"mine":5,"opponent":0}],"4":[{"risk":0.08108108108108109,"profitToRisk":37,"profit":3},{"endTurn":true},{"mine":8,"opponent":0}],"5":[{"mine":8,"opponent":3}],"6":[{"risk":0.11428571428571428,"profitToRisk":43.75,"profit":5},{"risk":0.2857142857142857,"profitToRisk":35,"profit":10},{"risk":0.45714285714285713,"profitToRisk":39.375,"profit":18},{"endTurn":true},{"mine":28,"opponent":0}],"7":[{"risk":0.09375,"profitToRisk":32,"profit":3},{"risk":0.1875,"profitToRisk":5.333333333333333,"profit":1},{"risk":0.34375,"profitToRisk":29.09090909090909,"profit":10},{"risk":0.5,"profitToRisk":26,"profit":13},{"endTurn":true},{"mine":27,"opponent":31}],"8":[{"risk":0.07142857142857142,"profitToRisk":28,"profit":2},{"risk":0.3571428571428571,"profitToRisk":39.2,"profit":14},{"endTurn":true},{"mine":41,"opponent":22}],"9":[{"risk":0.15384615384615385,"profitToRisk":6.5,"profit":1},{"risk":0.38461538461538464,"profitToRisk":13,"profit":5},{"risk":0.46153846153846156,"profitToRisk":15.166666666666666,"profit":7},{"endTurn":true},{"mine":39,"opponent":46}],"10":[{"mine":46,"opponent":46}],"11":[{"risk":0.18181818181818182,"profitToRisk":-5.5,"profit":-1},{"mine":46,"opponent":46}],"12":[{"mine":46,"opponent":46}],"13":[{"mine":46,"opponent":50}],"14":[{"risk":0.058823529411764705,"profitToRisk":51,"profit":3},{"risk":0.23529411764705882,"profitToRisk":21.25,"profit":5},{"mine":55,"opponent":47}],"15":[{"risk":0.08333333333333333,"profitToRisk":-36,"profit":-3},{"mine":54,"opponent":52}],"16":[{"mine":55,"opponent":52}],"17":[{"risk":0.3333333333333333,"profitToRisk":-6,"profit":-2},{"risk":0.5,"profitToRisk":0,"profit":0},{"risk":0.8333333333333333,"profitToRisk":1.2000000000000002,"profit":1},{"endTurn":true},{"mine":55,"opponent":61}],"18":[{"risk":0.3333333333333333,"profitToRisk":-3,"profit":-1},{"risk":0.6666666666666666,"profitToRisk":0,"profit":0},{"mine":56,"opponent":61}]},"matchid":"63dc0f7e2c13e23341bf3432","mine":56,"opponent":61}
+{
+    "moves": {
+        "0": [
+            {
+                "risk": 0.1,
+                "profitToRisk": 40,
+                "profit": 4
+            },
+            {
+                "risk": 0.2,
+                "profitToRisk": 35,
+                "profit": 7
+            },
+            {
+                "mine": 0,
+                "opponent": 0
+            }
+        ],
+        "1": [
+            {
+                "risk": 0.10638297872340426,
+                "profitToRisk": 37.6,
+                "profit": 4
+            },
+            {
+                "risk": 0.2127659574468085,
+                "profitToRisk": 51.7,
+                "profit": 11
+            },
+            {
+                "risk": 0.2978723404255319,
+                "profitToRisk": 53.714285714285715,
+                "profit": 16
+            },
+            {
+                "mine": 0,
+                "opponent": 0
+            }
+        ],
+        "2": [
+            {
+                "risk": 0.06976744186046512,
+                "profitToRisk": 43,
+                "profit": 3
+            },
+            {
+                "risk": 0.18604651162790697,
+                "profitToRisk": 43,
+                "profit": 8
+            },
+            {
+                "endTurn": true
+            },
+            {
+                "mine": 8,
+                "opponent": 0
+            }
+        ],
+        "3": [
+            {
+                "risk": 0.12195121951219512,
+                "profitToRisk": 57.4,
+                "profit": 7
+            },
+            {
+                "risk": 0.21951219512195122,
+                "profitToRisk": 36.44444444444444,
+                "profit": 8
+            },
+            {
+                "mine": 5,
+                "opponent": 0
+            }
+        ],
+        "4": [
+            {
+                "risk": 0.08108108108108109,
+                "profitToRisk": 37,
+                "profit": 3
+            },
+            {
+                "endTurn": true
+            },
+            {
+                "mine": 8,
+                "opponent": 0
+            }
+        ],
+        "5": [
+            {
+                "mine": 8,
+                "opponent": 3
+            }
+        ],
+        "6": [
+            {
+                "risk": 0.11428571428571428,
+                "profitToRisk": 43.75,
+                "profit": 5
+            },
+            {
+                "risk": 0.2857142857142857,
+                "profitToRisk": 35,
+                "profit": 10
+            },
+            {
+                "risk": 0.45714285714285713,
+                "profitToRisk": 39.375,
+                "profit": 18
+            },
+            {
+                "endTurn": true
+            },
+            {
+                "mine": 28,
+                "opponent": 0
+            }
+        ],
+        "7": [
+            {
+                "risk": 0.09375,
+                "profitToRisk": 32,
+                "profit": 3
+            },
+            {
+                "risk": 0.1875,
+                "profitToRisk": 5.333333333333333,
+                "profit": 1
+            },
+            {
+                "risk": 0.34375,
+                "profitToRisk": 29.09090909090909,
+                "profit": 10
+            },
+            {
+                "risk": 0.5,
+                "profitToRisk": 26,
+                "profit": 13
+            },
+            {
+                "endTurn": true
+            },
+            {
+                "mine": 27,
+                "opponent": 31
+            }
+        ],
+        "8": [
+            {
+                "risk": 0.07142857142857142,
+                "profitToRisk": 28,
+                "profit": 2
+            },
+            {
+                "risk": 0.3571428571428571,
+                "profitToRisk": 39.2,
+                "profit": 14
+            },
+            {
+                "endTurn": true
+            },
+            {
+                "mine": 41,
+                "opponent": 22
+            }
+        ],
+        "9": [
+            {
+                "risk": 0.15384615384615385,
+                "profitToRisk": 6.5,
+                "profit": 1
+            },
+            {
+                "risk": 0.38461538461538464,
+                "profitToRisk": 13,
+                "profit": 5
+            },
+            {
+                "risk": 0.46153846153846156,
+                "profitToRisk": 15.166666666666666,
+                "profit": 7
+            },
+            {
+                "endTurn": true
+            },
+            {
+                "mine": 39,
+                "opponent": 46
+            }
+        ],
+        "10": [
+            {
+                "mine": 46,
+                "opponent": 46
+            }
+        ],
+        "11": [
+            {
+                "risk": 0.18181818181818182,
+                "profitToRisk": -5.5,
+                "profit": -1
+            },
+            {
+                "mine": 46,
+                "opponent": 46
+            }
+        ],
+        "12": [
+            {
+                "mine": 46,
+                "opponent": 46
+            }
+        ],
+        "13": [
+            {
+                "mine": 46,
+                "opponent": 50
+            }
+        ],
+        "14": [
+            {
+                "risk": 0.058823529411764705,
+                "profitToRisk": 51,
+                "profit": 3
+            },
+            {
+                "risk": 0.23529411764705882,
+                "profitToRisk": 21.25,
+                "profit": 5
+            },
+            {
+                "mine": 55,
+                "opponent": 47
+            }
+        ],
+        "15": [
+            {
+                "risk": 0.08333333333333333,
+                "profitToRisk": -36,
+                "profit": -3
+            },
+            {
+                "mine": 54,
+                "opponent": 52
+            }
+        ],
+        "16": [
+            {
+                "mine": 55,
+                "opponent": 52
+            }
+        ],
+        "17": [
+            {
+                "risk": 0.3333333333333333,
+                "profitToRisk": -6,
+                "profit": -2
+            },
+            {
+                "risk": 0.5,
+                "profitToRisk": 0,
+                "profit": 0
+            },
+            {
+                "risk": 0.8333333333333333,
+                "profitToRisk": 1.2000000000000002,
+                "profit": 1
+            },
+            {
+                "endTurn": true
+            },
+            {
+                "mine": 55,
+                "opponent": 61
+            }
+        ],
+        "18": [
+            {
+                "risk": 0.3333333333333333,
+                "profitToRisk": -3,
+                "profit": -1
+            },
+            {
+                "risk": 0.6666666666666666,
+                "profitToRisk": 0,
+                "profit": 0
+            },
+            {
+                "mine": 56,
+                "opponent": 61
+            }
+        ]
+    },
+    "matchid": "63dc0f7e2c13e23341bf3432",
+    "mine": 56,
+    "opponent": 61
+}

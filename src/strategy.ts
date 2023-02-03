@@ -48,7 +48,7 @@ export const evaluateBustRisk = (cards: Card[], drawPile: CardStack) => {
 }
 
 export const evaluateProfit = (playArea: CardStack, myHand: CardStack, drawPile: CardStack) => {
-  return playArea.cards.reduce((profit, card) => profit + card.value - (myHand.findHighest(card.suit)?.value ?? 0), 0)
+  return playArea.cards.reduce((profit, card) => profit + Math.pow(card.value, 2) - Math.pow((myHand.findHighest(card.suit)?.value ?? 0), 2), 0)
 }
 
 export const shouldEndTurn = (game: GameLoop): boolean => {
@@ -59,25 +59,18 @@ export const shouldEndTurn = (game: GameLoop): boolean => {
   if (risk <= 0) {
     return true
   }
-  const profitToRisk = Math.pow(profit, 2) / risk;
+  const profitToRisk = profit / risk;
   game.logs[game.turn].push({ risk, profitToRisk, profit })
 
-  if (isCoveredByAnchor(game))
+
+  if (profit > 20) return true;
+
+  if (profit > 15 && risk > 0.5) return true;
+
+  if (isCoveredByAnchor(game) || (1 - risk) < 0.6) {
     return false;
-
-
-
-  if (game.imDummy || !limits[game.turn]?.profitToRisk) {
-    return Math.random() * 10 < 3
   }
 
-  const minimalProfitToRiskLimit = limits[game.turn].profitToRisk - limits[game.turn].profitToRisk * NON_BUSTING_CHANCE_THRESHOLD;
 
-
-  if (profitToRisk > minimalProfitToRiskLimit) {
-    game.logs[game.turn].push({ endTurn: true } as any)
-    return true;
-  }
-
-  return false
+  return Math.random() * 10 < 3
 };
