@@ -28,6 +28,8 @@ export default class GameLoop {
   myBank!: CardStack;
   opponentBank!: CardStack;
   turn: number = 0;
+  myIndex: number = -1;
+  imDummy: boolean = false;
   logs: { [turnNumber: number]: LogEntry[] } = {};
 
   mustDraw = 0;
@@ -36,7 +38,7 @@ export default class GameLoop {
   get drawPileSize() { return this.drawPile.cards.length }
   discardPileSize = 0;
 
-  constructor(myIndex: number, match: Match) {
+  constructor(myIndex: number, match: Match, isDummy: boolean) {
     this.playArea = new CardStack(match.state.playArea);
     this.banks = [
       bankFromState(match.state.banks[0]),
@@ -46,9 +48,10 @@ export default class GameLoop {
     this.myBank = this.banks[myIndex];
     this.opponentBank = this.banks[1 - myIndex];
     this.discardPileSize = match.discardPileSize;
-
+    this.myIndex = myIndex;
     this.drawPile = initialDrawPile();
     this.discardPile = initialDiscardPile();
+    this.imDummy = isDummy;
   }
 
   removeFromDrawPile(card: Card) {

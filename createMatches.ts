@@ -69,7 +69,7 @@ const program = async () => {
         }
 
         try {
-            await gameApi.createMatch(JSON.stringify({ playerids: ['000000000000000000000000', process.env.USERNAME], tags: ["learning-evaluating"] }))
+            await gameApi.createMatch(JSON.stringify({ playerids: ['000000000000000000000000', process.env.USERNAME], tags: ["alp-iddqd"] }))
         } catch (err) {
             console.log('err: ', (err as any).response.text);
         }

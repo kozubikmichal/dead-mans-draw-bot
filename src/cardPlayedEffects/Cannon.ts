@@ -12,10 +12,11 @@ import Responses from "../responses";
 import GameLoop, { CardPlayedEffectResponse, Effect } from "../types";
 
 export default (effect: Effect, game: GameLoop): CardPlayedEffectResponse => {
-	let card = game.opponentBank.findHighestAny();
+	console.info('effect: ', effect);
+	let card = game.opponentBank.findHighestAny() ?? null;
 
 	// we have to do that............... what a pity
-	if (!card) card = game.myBank.findHighestAny()
+	// if (!card) card = game.myBank.findHighestAny()
 
 	return Responses.ResponseToEffect("Cannon", card);
 };

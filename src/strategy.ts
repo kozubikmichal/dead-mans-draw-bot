@@ -5,7 +5,7 @@ import { Card } from "./types";
 import { numberOf, percent, SuitList } from "./utils";
 
 // the higher the safer, 0 - 1
-const NON_BUSTING_CHANCE_THRESHOLD = 0.1;
+const NON_BUSTING_CHANCE_THRESHOLD = 0.2;
 
 const isCoveredByAnchor = (game: GameLoop) =>
   game.playArea.getLastCard()?.suit === "Anchor" &&
@@ -51,15 +51,6 @@ export const evaluateProfit = (playArea: CardStack, myHand: CardStack, drawPile:
   return playArea.cards.reduce((profit, card) => profit + card.value - (myHand.findHighest(card.suit)?.value ?? 0), 0)
 }
 
-export const evaluateCard = ({ suit, value }, myBank, opponentHand) => {
-  const differenceNow = myBank[suit][0] ?? 0 - opponentHand[suit][0];
-  const differencePossible = value - opponentHand[suit];
-  const profit = differencePossible - differenceNow
-  return Math.max(0, profit);
-}
-
-
-
 export const shouldEndTurn = (game: GameLoop): boolean => {
   const profit = evaluateProfit(game.playArea, game.myBank, game.drawPile);
   const risk = evaluateBustRisk(game.playArea.cards, game.drawPile)
@@ -68,13 +59,20 @@ export const shouldEndTurn = (game: GameLoop): boolean => {
   if (risk <= 0) {
     return true
   }
-  const profitToRisk = profit / risk;
+  const profitToRisk = Math.pow(profit, 2) / risk;
   game.logs[game.turn].push({ risk, profitToRisk, profit })
-
-  const minimalProfitToRiskLimit = limits[game.turn].profitToRisk - limits[game.turn].profitToRisk * NON_BUSTING_CHANCE_THRESHOLD;
 
   if (isCoveredByAnchor(game))
     return false;
+
+
+
+  if (game.imDummy || !limits[game.turn]?.profitToRisk) {
+    return Math.random() * 10 < 3
+  }
+
+  const minimalProfitToRiskLimit = limits[game.turn].profitToRisk - limits[game.turn].profitToRisk * NON_BUSTING_CHANCE_THRESHOLD;
+
 
   if (profitToRisk > minimalProfitToRiskLimit) {
     game.logs[game.turn].push({ endTurn: true } as any)

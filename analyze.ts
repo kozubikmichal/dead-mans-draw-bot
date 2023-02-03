@@ -4,8 +4,10 @@ const files = fs.readdirSync("./logs");
 
 
 const logs = files.map(file => {
+    console.log('file: ', file);
+    if (file === '.DS_Store') return null
     return JSON.parse(fs.readFileSync(`./logs/${file}`, 'utf8'))
-})
+}).filter(f => f);
 
 console.log("I won in ", logs.reduce((count, log) => count + (log.mine > log.opponent ? 1 : 0), 0) / logs.length * 100, '% of games')
 
@@ -100,13 +102,18 @@ const structurizedAnalitics = matchesRisksByTurnNumber.reduce((obj, curr) => {
 }, {})
 
 const avgAnalyticByTurn = Object.keys(structurizedAnalitics).reduce((obj, key) => {
-    obj[key] = structurizedAnalitics[key].reduce((analiticOject, curr) => (
-        {
-            risk: curr.risk + analiticOject.risk,
-            profitToRisk: Math.max(curr.profitToRisk, 0) + analiticOject.profitToRisk,
-            profit: Math.max(curr.profit, 0) + analiticOject.profit
+    obj[key] = structurizedAnalitics[key].reduce((analiticOject, curr) => {
+        const risk = curr.risk + analiticOject.risk;
+        const profitToRisk = Math.pow(curr.profit, 2) / risk + analiticOject.profitToRisk;
+        const profit = curr.profit + analiticOject.profit
+
+        return {
+            risk,
+            profitToRisk,
+            profit
         }
-    ), { risk: 0, profitToRisk: 0, profit: 0 })
+    }
+        , { risk: 0, profitToRisk: 0, profit: 0 })
 
     obj[key].risk /= structurizedAnalitics[key].length
     obj[key].profitToRisk /= structurizedAnalitics[key].length
