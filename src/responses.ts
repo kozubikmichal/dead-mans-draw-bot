@@ -1,3 +1,4 @@
+import { params } from "../client";
 import { Card, Suit } from "./types";
 
 type BotResponse = {
@@ -22,6 +23,7 @@ const Responses = {
 
   ResponseToEffect: (effectType: Suit, card: Card | null): BotResponse => ({
     etype: "ResponseToEffect",
+    autopick: params.rand,
     effect: {
       effectType,
       card,

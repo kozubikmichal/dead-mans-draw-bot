@@ -28,7 +28,7 @@ const params = require("yargs")
     })
     .help().argv;
 
-const gameApi = new Spc22Arena.GameApi();;
+const gameApi = new Spc22Arena.GameApi();
 
 const defaultClient = Spc22Arena.ApiClient.instance;
 defaultClient.basePath = "https://slhpc2023.appspot.com/";
@@ -40,15 +40,13 @@ basic.username = params.username;
 basic.password = params.password;
 
 export async function getActiveMatches() {
-    await new Promise(resolve => setTimeout(resolve, 2000));
     console.log("... polling ...")
 
-    var opts = { at: "today", active: "1" };
+    var opts = { at: "today", sortasc: true };
 
     let matches: null | any[] = null;
 
-    matches = await gameApi.getMatches(opts);
-    console.log('matches: ', matches);
+    matches = (await gameApi.getMatches(opts)).filter(match => Number.isInteger(match.activePlayerIndex));
 
     if (Array.isArray(matches) && matches.length > 0) {
         console.log("match is running currently")
@@ -62,24 +60,21 @@ export async function getActiveMatches() {
 }
 
 const program = async () => {
-    // const currentMatch = await gameApi.getMatch()
-    // while (true) {
-    const match = await getActiveMatches();
+    while (true) {
+        const activeMatches = await getActiveMatches();
+        console.log('activeMatches: ', activeMatches);
+        if (activeMatches) {
+            await new Promise(resolve => setTimeout(resolve, 15000));
+            continue
+        }
 
-    // if (match) continue;
-
-
-    // if (!match) {
-    try {
-        const newMatch = await gameApi.createMatch(JSON.stringify({ playerids: ['000000000000000000000000', process.env.USERNAME], tags: ["learning-evaluating"] }))
-        console.log('newMatch: ', newMatch);
-
-    } catch (err) {
-        console.log('err: ', (err as any).response.text);
+        try {
+            await gameApi.createMatch(JSON.stringify({ playerids: ['000000000000000000000000', process.env.USERNAME], tags: ["learning-evaluating"] }))
+        } catch (err) {
+            console.log('err: ', (err as any).response.text);
+        }
 
     }
-    // }
-    // }
 }
 
 program();

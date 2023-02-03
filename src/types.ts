@@ -79,3 +79,10 @@ export type Match = {
   drawPileSize: number;
   discardPileSize: number;
 };
+
+
+export type LogEntry = {
+  risk: number,
+  profit: number,
+  profitToRisk: number
+}
