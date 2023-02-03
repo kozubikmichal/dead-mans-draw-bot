@@ -2,13 +2,14 @@ import cardPlayedEffect from "./src/cardPlayedEffect";
 import { processEvents } from "./src/events";
 import GameLoop from "./src/GameLoop";
 import Responses from "./src/responses";
+import fs from "fs"
 require("dotenv").config();
 
 console.log = () => process.stdout.write(".");
 
 var Spc22Arena = require("spc22_arena");
 const pressAnyKey = require("press-any-key");
-const params = require("yargs")
+export const params = require("yargs")
   .option("u", {
     alias: "username",
     demandOption: false,
@@ -36,9 +37,14 @@ const params = require("yargs")
     demandOption: false,
     type: "string",
   })
+  .option("rand", {
+    alias: "r",
+    type: "boolean",
+    default: false
+  })
   .help().argv;
 
-console.log("input params: ", params);
+console.info("input params: ", params);
 
 const defaultClient = Spc22Arena.ApiClient.instance;
 //defaultClient.basePath = "http://localhost:8080";
@@ -68,7 +74,12 @@ async function main(matchid) {
       //-- receive match to play with
       const match = await wait_for_active_match();
       //-- play with the match
-      await play_a_match(match);
+      try {
+        await play_a_match(match);
+
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
 }
@@ -84,7 +95,7 @@ async function getHello() {
 async function get_match_by_id(matchid) {
   var gameapi = new Spc22Arena.GameApi();
 
-  const retval = await gameapi.getMatch(matchid);
+  const retval = await gameapi.getMatch(matchid, { showevents: true });
   return retval;
 }
 
@@ -131,7 +142,7 @@ async function play_a_match(match) {
   let myIndex = match.playerids.indexOf(basic.username);
   let gameLoop = new GameLoop(myIndex, match);
 
-  let pendingEffect =
+  let pendingEffect = params.rand ? false :
     match.state.currentPlayerIndex === myIndex && match.state.pendingEffect;
 
   const logs: any = [];
@@ -143,6 +154,12 @@ async function play_a_match(match) {
   // console.log("match", match);
 
   while (isMatchRunning) {
+    // Get discards
+    const opponentMoves = await gameapi.getMatch(matchid, { waitactive: true, showevents: true });
+    opponentMoves.moves.forEach(move => move.events.find(event => event.eventType === 'TurnEnded')?.turnEndedDelta?.drawPile?.removed?.forEach(card => gameLoop.removeFromDrawPile(card)))
+    gameLoop.turn = turncount;
+    gameLoop.logs[turncount] = [];
+
     //-- guard match ended
     if (move_has_event(lastmove, _matcheventyypes.MatchEnded)) {
       console.log("Match has ended");
@@ -151,18 +168,18 @@ async function play_a_match(match) {
     }
 
     console.info(
-      `\n=== TURN #${++turncount} ==================================`
+      `\n=== TURN #${turncount} ==================================`
     );
     //-- TURN: Draw a few cards
 
-    const Draw = Responses.Draw();
+    const Draw = Responses.Draw(params.rand);
     let useraction: any = Draw;
 
     while (isMatchRunning) {
       let opts = { wait: "1" };
       //opts = { autopick: "all" };
 
-      if (pendingEffect) {
+      if (pendingEffect && !params.rand) {
         useraction =
           cardPlayedEffect(match.state.pendingEffect, gameLoop) || Draw;
         pendingEffect = null;
@@ -187,10 +204,16 @@ async function play_a_match(match) {
             .executeActionForMatch(matchid, useraction, opts)
             .then((result) => {
               console.log(JSON.stringify(result, null, 2));
+
+              result.find(event => event.eventType === 'CardPlayedEffect')?.cardPlayedEffect?.cards?.forEach(card => gameLoop.removeFromDrawPile(card))
+              result.find(move => move.eventType === 'TurnEnded')?.turnEndedDelta?.drawPile?.removed?.forEach(card => gameLoop.removeFromDrawPile(card))
+
+
               doRetryDrawMove = false; //-- successfully drawn card
               return result;
             })
             .catch((err) => {
+
               //if (err?.status === 409) continue; // 409 - wait and continue
               if (err?.status === 409) {
                 console.log(
@@ -198,6 +221,7 @@ async function play_a_match(match) {
                 );
                 return err;
               } else {
+                console.log('err: ', err);
                 throw err;
               }
             });
@@ -206,24 +230,14 @@ async function play_a_match(match) {
         useraction = processEvents(lastmove as any, gameLoop);
 
         //-- check whether turn has ended by itself (bust or matchend)
-        if (move_has_event(lastmove, _matcheventyypes.TurnEnded)) break;
+        if (move_has_event(lastmove, _matcheventyypes.TurnEnded)) {
+          break
+        };
         if (move_has_event(lastmove, _matcheventyypes.MatchEnded)) {
           isMatchRunning = false;
           break;
         }
 
-        //-- based on a random factor we might initiate ending the turn - this is where you need to make it much smarter :)
-        // if (Math.random() * 10 < 3) {
-        //   console.info("Ending turn...");
-        //   let enduseraction = { etype: "EndTurn", autopick: true };
-        //   lastmove = await gameapi
-        //     .executeActionForMatch(matchid, enduseraction, opts)
-        //     .then((result) => {
-        //       console.log(JSON.stringify(result, null, 2));
-        //       return result;
-        //     });
-        //   break;
-        // }
       } catch (err) {
         //@ts-ignore
         if (err.status) {
@@ -239,10 +253,20 @@ async function play_a_match(match) {
         break;
       }
     } //-- end:TURN
+    gameLoop.logs[turncount].push({ mine: gameLoop.myBank.getValue(), opponent: gameLoop.opponentBank.getValue() } as any);
+    fs.writeFileSync(`./logs/${matchid}.json`, JSON.stringify({ moves: gameLoop.logs, matchid, mine: gameLoop.myBank.getValue(), opponent: gameLoop.opponentBank.getValue() }));
+
+    turncount = turncount + 1;
+
   } //-- end:MATCH
+
+  gameLoop.logs[turncount].push({ mine: gameLoop.myBank.getValue(), opponent: gameLoop.opponentBank.getValue() } as any);
+  fs.writeFileSync(`./logs/${matchid}.json`, JSON.stringify({ moves: gameLoop.logs, matchid, mine: gameLoop.myBank.getValue(), opponent: gameLoop.opponentBank.getValue() }));
 
   //-- read match end status and display
   let ri_matchend = move_has_event(lastmove, _matcheventyypes.MatchEnded);
+
+
   if (ri_matchend) {
     const endstatus =
       typeof ri_matchend.matchEndedWinnerIdx !== "number"
@@ -251,6 +275,8 @@ async function play_a_match(match) {
           basic.username
           ? "WON"
           : "LOST";
+
+
     console.log(
       `\nMATCHEND [${matchid}]: ${endstatus}`,
       `winnerIdx:${ri_matchend.matchEndedWinnerIdx} scores:${ri_matchend.matchEndedScores}`

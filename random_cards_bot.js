@@ -1,9 +1,16 @@
-require('dotenv').config()
-const fs = require('fs');
-
 var Spc22Arena = require("spc22_arena");
 const pressAnyKey = require("press-any-key");
 const params = require("yargs")
+    .option("u", {
+        alias: "username",
+        demandOption: false,
+        type: "string",
+    })
+    .option("p", {
+        alias: "password",
+        demandOption: false,
+        type: "string",
+    })
     .option("m", {
         alias: "matchid",
         demandOption: false,
@@ -16,7 +23,6 @@ const params = require("yargs")
     })
     .help().argv;
 
-
 console.log("input params: ", params);
 
 const defaultClient = Spc22Arena.ApiClient.instance;
@@ -26,8 +32,8 @@ console.log(`Using server: ${defaultClient.basePath}`);
 
 // Configure HTTP basic authorization: basic
 const basic = defaultClient.authentications["basic"];
-basic.username = params.username ?? process.env.USERNAME;
-basic.password = params.password ?? process.env.PASSWORD;
+basic.username = params.username;
+basic.password = params.password;
 
 console.log(`Playing as user: ${basic.username}.\n`);
 
@@ -96,7 +102,10 @@ function move_has_event(move, targetEventType) {
 }
 
 async function play_a_match(match) {
-    const fileName = `./logs/${new Date().toISOString()}.json`;
+    if (!match.playerids.includes('63cfb5630f032e987d2a7258')) {
+        console.log("Not desired user");
+        return;
+    }
     const matchid = match._id?.toString();
     console.log(`Using ${matchid} for the game`);
 
@@ -105,13 +114,9 @@ async function play_a_match(match) {
     let turncount = 0;
     let isMatchRunning = true;
     let lastmove = undefined;
-
-    const logs = [];
-
     while (isMatchRunning) {
         //-- guard match ended
         if (move_has_event(lastmove, _matcheventyypes.MatchEnded)) {
-            fs.writeFileSync(fileName, JSON.stringify(logs, null, 2));
             console.log("Match has ended");
             isMatchRunning = false;
             break;
@@ -164,13 +169,12 @@ async function play_a_match(match) {
                 }
 
                 //-- based on a random factor we might initiate ending the turn - this is where you need to make it much smarter :)
-                if (Math.random() * 10 < 3) {
+                if (Math.random() * 10 < 2) {
                     console.info("Ending turn...");
                     enduseraction = { etype: "EndTurn", autopick: true };
                     lastmove = await gameapi
                         .executeActionForMatch(matchid, enduseraction, opts)
                         .then((result) => {
-                            logs.push(result);
                             console.log(JSON.stringify(result, null, 2));
                             return result;
                         });

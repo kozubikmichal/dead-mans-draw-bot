@@ -1,4 +1,5 @@
 import { Card, Delta, Suit } from "./types";
+import { SuitList } from "./utils";
 
 export default class CardStack {
   private cardsAfterLastDelta: Card[] = [];
@@ -85,4 +86,13 @@ export default class CardStack {
   getLastCard(): Card | undefined {
     return this.cards[this.cards.length - 1];
   }
+
+  getCountWithSuit(suit: Suit): number {
+    return this.cards.filter(card => card.suit === suit).length
+  }
+
+  getValue() {
+    return SuitList.reduce((val, suite) => this.findHighestValue(suite) + val, 0)
+  }
+
 }
