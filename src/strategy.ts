@@ -62,12 +62,13 @@ export const shouldEndTurn = (game: GameLoop): boolean => {
   const profitToRisk = profit / risk;
   game.logs[game.turn].push({ risk, profitToRisk, profit })
 
+  if (isCoveredByAnchor(game)) return false;
 
   if (profit > 20) return true;
 
   if (profit > 15 && risk > 0.5) return true;
 
-  if (isCoveredByAnchor(game) || (1 - risk) < 0.6) {
+  if ((1 - risk) < 0.6) {
     return false;
   }
 
